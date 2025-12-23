@@ -41,7 +41,9 @@ def check_and_increment_usage(db, username, usage_type):
     role_limits = usage_limits.get(role, default_limits.get(role))
 
     limit_key = f'daily_{usage_type}_limit'
-    limit = role_limits.get(limit_key, 0)
+    # Use fallback from default_limits if the specific limit key is missing in DB settings
+    # This prevents "limit=0" issues if the DB hasn't been migrated yet
+    limit = role_limits.get(limit_key, default_limits[role].get(limit_key, 0))
 
     # Check date and reset if needed
     today = get_beijing_date_str()
