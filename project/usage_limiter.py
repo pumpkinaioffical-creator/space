@@ -28,8 +28,8 @@ def check_and_increment_usage(db, username, usage_type):
     # Get limits settings
     # Default Limits
     default_limits = {
-        'standard': {'daily_chat_limit': 10, 'daily_websocket_limit': 5},
-        'pro': {'daily_chat_limit': 100, 'daily_websocket_limit': 50}
+        'standard': {'daily_chat_limit': 10, 'daily_websocket_limit': 5, 'daily_modelscope_limit': 5},
+        'pro': {'daily_chat_limit': 100, 'daily_websocket_limit': 50, 'daily_modelscope_limit': 50}
     }
 
     # Load from DB pro_settings, fallback to defaults

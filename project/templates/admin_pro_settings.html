@@ -32,6 +32,18 @@
                 </label>
             </div>
 
+            <!-- Force GitHub Binding Switch -->
+            <div class="flex items-center justify-between pt-4">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900">强制绑定 GitHub (Force GitHub Binding)</h3>
+                    <p class="text-sm text-gray-500">开启后，用户必须绑定 GitHub 账号才能进行推理 (ModelScope)。</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" name="force_github_binding" class="sr-only peer" {% if settings.force_github_binding %}checked{% endif %}>
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-900"></div>
+                </label>
+            </div>
+
             <!-- Promotion Mode Switch -->
             <div class="flex items-center justify-between pt-4">
                 <div>
@@ -113,6 +125,10 @@
                                 <label class="block text-xs font-bold text-gray-500 uppercase mb-1">WebSocket 推理次数</label>
                                 <input type="number" name="standard_daily_websocket_limit" value="{{ settings.usage_limits.standard.daily_websocket_limit }}" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-pumpkin-500 focus:ring-pumpkin-500">
                             </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">ModelScope 图像生成次数</label>
+                                <input type="number" name="standard_daily_modelscope_limit" value="{{ settings.usage_limits.standard.daily_modelscope_limit }}" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-pumpkin-500 focus:ring-pumpkin-500">
+                            </div>
                         </div>
                     </div>
 
@@ -130,6 +146,10 @@
                             <div>
                                 <label class="block text-xs font-bold text-pumpkin-700/70 uppercase mb-1">WebSocket 推理次数</label>
                                 <input type="number" name="pro_daily_websocket_limit" value="{{ settings.usage_limits.pro.daily_websocket_limit }}" class="w-full rounded-lg border-pumpkin-300 shadow-sm focus:border-pumpkin-500 focus:ring-pumpkin-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-pumpkin-700/70 uppercase mb-1">ModelScope 图像生成次数</label>
+                                <input type="number" name="pro_daily_modelscope_limit" value="{{ settings.usage_limits.pro.daily_modelscope_limit }}" class="w-full rounded-lg border-pumpkin-300 shadow-sm focus:border-pumpkin-500 focus:ring-pumpkin-500">
                             </div>
                         </div>
                     </div>

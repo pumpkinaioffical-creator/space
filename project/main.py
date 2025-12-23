@@ -1502,7 +1502,8 @@ def modelscope_submit(ai_project_id):
     if not user:
         return jsonify({'success': False, 'error': '用户不存在'}), 401
     
-    if not user.get('is_github_user'):
+    pro_settings = db.get('pro_settings', {})
+    if pro_settings.get('force_github_binding') and not user.get('is_github_user'):
         return jsonify({
             'success': False, 
             'error': '需要绑定 GitHub 才能使用此功能',
@@ -1539,6 +1540,12 @@ def modelscope_submit(ai_project_id):
             'reason': reason,
             'wait_seconds': wait_seconds
         }), 429
+
+    # Check Usage Limit
+    from .usage_limiter import check_and_increment_usage
+    allowed, error_msg = check_and_increment_usage(db, username, 'modelscope')
+    if not allowed:
+        return jsonify({'success': False, 'error': error_msg}), 403
     
     # Get request data
     data = request.get_json() or {}
