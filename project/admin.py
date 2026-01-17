@@ -39,10 +39,11 @@ def ensure_pro_settings(db):
 
     # Default usage limits
     default_limits = {
-        'standard': {'daily_chat_limit': 10, 'daily_websocket_limit': 5},
-        'pro': {'daily_chat_limit': 100, 'daily_websocket_limit': 50}
+        'standard': {'daily_chat_limit': 10, 'daily_websocket_limit': 5, 'daily_modelscope_limit': 5},
+        'pro': {'daily_chat_limit': 100, 'daily_websocket_limit': 50, 'daily_modelscope_limit': 50}
     }
     db['pro_settings'].setdefault('usage_limits', default_limits)
+    db['pro_settings'].setdefault('force_github_binding', True)
 
     # Ensure nested keys exist if structure exists but is partial
     limits = db['pro_settings']['usage_limits']
@@ -52,6 +53,7 @@ def ensure_pro_settings(db):
         else:
             limits[role].setdefault('daily_chat_limit', default_limits[role]['daily_chat_limit'])
             limits[role].setdefault('daily_websocket_limit', default_limits[role]['daily_websocket_limit'])
+            limits[role].setdefault('daily_modelscope_limit', default_limits[role]['daily_modelscope_limit'])
 
     return db['pro_settings']
 
@@ -219,6 +221,7 @@ def manage_pro_settings():
 
     if request.method == 'POST':
         settings['enabled'] = request.form.get('enabled') == 'on'
+        settings['force_github_binding'] = request.form.get('force_github_binding') == 'on'
         
         # Promotion Mode logic: Can only be enabled if Pro System is disabled
         promotion_enabled = request.form.get('promotion_enabled') == 'on'
@@ -239,8 +242,11 @@ def manage_pro_settings():
         try:
             settings['usage_limits']['standard']['daily_chat_limit'] = int(request.form.get('standard_daily_chat_limit', 10))
             settings['usage_limits']['standard']['daily_websocket_limit'] = int(request.form.get('standard_daily_websocket_limit', 5))
+            settings['usage_limits']['standard']['daily_modelscope_limit'] = int(request.form.get('standard_daily_modelscope_limit', 5))
+
             settings['usage_limits']['pro']['daily_chat_limit'] = int(request.form.get('pro_daily_chat_limit', 100))
             settings['usage_limits']['pro']['daily_websocket_limit'] = int(request.form.get('pro_daily_websocket_limit', 50))
+            settings['usage_limits']['pro']['daily_modelscope_limit'] = int(request.form.get('pro_daily_modelscope_limit', 50))
         except (ValueError, TypeError):
             flash('使用限制必须是整数。', 'error')
             return redirect(url_for('admin.manage_pro_settings'))

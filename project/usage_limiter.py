@@ -28,8 +28,8 @@ def check_and_increment_usage(db, username, usage_type):
     # Get limits settings
     # Default Limits
     default_limits = {
-        'standard': {'daily_chat_limit': 10, 'daily_websocket_limit': 5},
-        'pro': {'daily_chat_limit': 100, 'daily_websocket_limit': 50}
+        'standard': {'daily_chat_limit': 10, 'daily_websocket_limit': 5, 'daily_modelscope_limit': 5},
+        'pro': {'daily_chat_limit': 100, 'daily_websocket_limit': 50, 'daily_modelscope_limit': 50}
     }
 
     # Load from DB pro_settings, fallback to defaults
@@ -41,7 +41,9 @@ def check_and_increment_usage(db, username, usage_type):
     role_limits = usage_limits.get(role, default_limits.get(role))
 
     limit_key = f'daily_{usage_type}_limit'
-    limit = role_limits.get(limit_key, 0)
+    # Use fallback from default_limits if the specific limit key is missing in DB settings
+    # This prevents "limit=0" issues if the DB hasn't been migrated yet
+    limit = role_limits.get(limit_key, default_limits[role].get(limit_key, 0))
 
     # Check date and reset if needed
     today = get_beijing_date_str()

@@ -1,9 +1,12 @@
 {% extends "layout.html" %}
-{% block title %}S3 设置 - 管理面板{% endblock %}
+{% block title %}S3 / Tebi 存储设置 - 管理面板{% endblock %}
 {% block content %}
 <div class="container mt-4">
-    <h2>S3 存储设置</h2>
-    <p>在此处配置您的 S3 兼容存储桶的设置。这些设置将用于存储空间封面和推理结果文件。</p>
+    <h2>S3 / Tebi 存储设置</h2>
+    <div class="alert alert-info">
+        <p class="mb-2">在此处配置您的 S3 兼容存储桶（如 Tebi, AWS S3, MinIO 等）。</p>
+        <p class="mb-0 small"><strong>Tebi 推荐配置：</strong><br>Endpoint URL: <code>https://s3.tebi.io</code><br>Access Key / Secret Key: 从 Tebi 控制台获取<br>Bucket Name: 您创建的存储桶名称</p>
+    </div>
 
     <form method="POST" action="{{ url_for('admin.manage_s3_settings') }}" class="mt-4">
         <div class="mb-3">
